@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.shevlyagin.steptracker.ui.DashboardScreen
 import com.shevlyagin.steptracker.ui.theme.StepTrackerAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +21,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StepTrackerAndroidTheme {
+                val stepTrackerState = rememberStepTrackerState()
+                var selectedMonth by remember { mutableStateOf(1) }
+                var selectedDay by remember { mutableStateOf(1) }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    DashboardScreen(
+                        steps = stepTrackerState.getSteps(selectedMonth, selectedDay),
+                        dailyGoal = stepTrackerState.dailyGoal,
+                        selectedMonth = selectedMonth,
+                        selectedDay = selectedDay,
+                        onMonthChange = { selectedMonth = it },
+                        onDayChange = { selectedDay = it },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    StepTrackerAndroidTheme {
-        Greeting("Android")
     }
 }
