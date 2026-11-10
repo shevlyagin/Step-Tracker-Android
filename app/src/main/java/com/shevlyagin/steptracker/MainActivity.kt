@@ -12,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.shevlyagin.steptracker.ui.DashboardScreen
+import com.shevlyagin.steptracker.ui.AddStepsScreen
 import com.shevlyagin.steptracker.ui.theme.StepTrackerAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,13 +26,15 @@ class MainActivity : ComponentActivity() {
                 var selectedDay by remember { mutableStateOf(1) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    DashboardScreen(
-                        steps = stepTrackerState.getSteps(selectedMonth, selectedDay),
-                        dailyGoal = stepTrackerState.dailyGoal,
+                    AddStepsScreen(
                         selectedMonth = selectedMonth,
                         selectedDay = selectedDay,
+                        savedSteps = stepTrackerState.getSteps(selectedMonth, selectedDay),
                         onMonthChange = { selectedMonth = it },
                         onDayChange = { selectedDay = it },
+                        onSaveSteps = { steps ->
+                            stepTrackerState.saveSteps(selectedMonth, selectedDay, steps)
+                        },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
