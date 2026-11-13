@@ -128,14 +128,28 @@ On Windows, use `gradlew.bat testDebugUnitTest`.
 
 ## Screenshots
 
-Real screenshots must be captured from the running application and have not yet
-been added to the repository. They are intentionally listed as text placeholders
-instead of image embeds so that GitHub does not display broken images.
-
-- Dashboard — `docs/screenshots/dashboard.png` (pending)
-- Add Steps — `docs/screenshots/add-steps.png` (pending)
-- Statistics — `docs/screenshots/statistics.png` (pending)
-- Goals — `docs/screenshots/goals.png` (pending)
+<table>
+  <tr>
+    <td align="center">
+      <strong>Dashboard</strong><br>
+      <img src="docs/screenshots/dashboard.png" alt="Dashboard screen" width="260">
+    </td>
+    <td align="center">
+      <strong>Add Steps</strong><br>
+      <img src="docs/screenshots/add-steps.png" alt="Add Steps screen" width="260">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Statistics</strong><br>
+      <img src="docs/screenshots/statistics.png" alt="Statistics screen" width="260">
+    </td>
+    <td align="center">
+      <strong>Goals</strong><br>
+      <img src="docs/screenshots/goals.png" alt="Goals screen" width="260">
+    </td>
+  </tr>
+</table>
 
 ## Current Limitations
 
