@@ -29,21 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shevlyagin.steptracker.ui.theme.StepTrackerAndroidTheme
 
-private val monthNames = listOf(
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-)
-
 @Composable
 fun DashboardScreen(
     steps: Int,
@@ -57,7 +42,7 @@ fun DashboardScreen(
     val progress = (steps.toFloat() / dailyGoal).coerceIn(0f, 1f)
     val completionPercent = steps.toLong() * 100 / dailyGoal
     val remainingSteps = (dailyGoal.toLong() - steps).coerceAtLeast(0)
-    val monthName = monthNames[selectedMonth - 1]
+    val selectedMonthName = monthName(selectedMonth)
 
     Column(
         modifier = modifier
@@ -72,7 +57,7 @@ fun DashboardScreen(
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "$monthName $selectedDay",
+            text = "$selectedMonthName ${formatWholeNumber(selectedDay)}",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -100,7 +85,8 @@ fun DashboardScreen(
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    text = steps.toString(),
+                    text = formatWholeNumber(steps),
+                    modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -129,11 +115,14 @@ fun DashboardScreen(
                 ) {
                     Text(
                         text = "Daily progress",
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "$completionPercent%",
+                        text = "${formatWholeNumber(completionPercent)}%",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
@@ -150,9 +139,9 @@ fun DashboardScreen(
                 Text(
                     text = when {
                         steps > dailyGoal ->
-                            "Goal exceeded by ${steps.toLong() - dailyGoal} steps"
+                            "Goal exceeded by ${formatWholeNumber(steps.toLong() - dailyGoal)} steps"
                         steps == dailyGoal -> "Daily goal reached"
-                        else -> "$remainingSteps steps remaining"
+                        else -> "${formatWholeNumber(remainingSteps)} steps remaining"
                     },
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -164,8 +153,16 @@ fun DashboardScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    DashboardMetric(label = "Daily goal", value = dailyGoal.toString())
-                    DashboardMetric(label = "Remaining", value = remainingSteps.toString())
+                    DashboardMetric(
+                        label = "Daily goal",
+                        value = formatWholeNumber(dailyGoal),
+                        modifier = Modifier.weight(1f)
+                    )
+                    DashboardMetric(
+                        label = "Remaining",
+                        value = formatWholeNumber(remainingSteps),
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
@@ -191,7 +188,7 @@ private fun DateSelectorCard(
             )
             ValueSelector(
                 label = "Month",
-                value = monthNames[selectedMonth - 1],
+                value = monthName(selectedMonth),
                 canDecrease = selectedMonth > 1,
                 canIncrease = selectedMonth < 12,
                 onDecrease = { onMonthChange(selectedMonth - 1) },
@@ -199,7 +196,7 @@ private fun DateSelectorCard(
             )
             ValueSelector(
                 label = "Day",
-                value = selectedDay.toString(),
+                value = formatWholeNumber(selectedDay),
                 canDecrease = selectedDay > 1,
                 canIncrease = selectedDay < 30,
                 onDecrease = { onDayChange(selectedDay - 1) },
@@ -263,8 +260,12 @@ private fun ValueSelector(
 }
 
 @Composable
-private fun DashboardMetric(label: String, value: String) {
-    Column {
+private fun DashboardMetric(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelLarge,
@@ -272,8 +273,10 @@ private fun DashboardMetric(label: String, value: String) {
         )
         Text(
             text = value,
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            softWrap = true
         )
     }
 }

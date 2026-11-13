@@ -73,7 +73,8 @@ fun GoalsScreen(
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    text = currentGoal.toString(),
+                    text = formatWholeNumber(currentGoal),
+                    modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -153,7 +154,7 @@ internal fun validateGoalInput(input: String): String? {
     if (input.isBlank()) return "Enter a daily goal"
 
     val goal = input.toIntOrNull()
-        ?: return "Enter a whole number from 1 to ${Int.MAX_VALUE}"
+        ?: return "Enter a whole number from 1 to ${formatWholeNumber(Int.MAX_VALUE)}"
 
     return if (goal <= 0) "Daily goal must be greater than zero" else null
 }

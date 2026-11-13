@@ -19,15 +19,15 @@ class AddStepsInputTest {
     @Test
     fun lettersAndNonIntegerValuesAreRejected() {
         assertEquals(
-            "Enter a whole number from 0 to ${Int.MAX_VALUE}",
+            "Enter a whole number from 0 to ${formatWholeNumber(Int.MAX_VALUE)}",
             validateStepsInput("steps")
         )
         assertEquals(
-            "Enter a whole number from 0 to ${Int.MAX_VALUE}",
+            "Enter a whole number from 0 to ${formatWholeNumber(Int.MAX_VALUE)}",
             validateStepsInput("1.5")
         )
         assertEquals(
-            "Enter a whole number from 0 to ${Int.MAX_VALUE}",
+            "Enter a whole number from 0 to ${formatWholeNumber(Int.MAX_VALUE)}",
             validateStepsInput("2147483648")
         )
     }

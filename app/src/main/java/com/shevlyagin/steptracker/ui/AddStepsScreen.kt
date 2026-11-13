@@ -1,11 +1,14 @@
 package com.shevlyagin.steptracker.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -81,12 +84,13 @@ fun AddStepsScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Steps for month $selectedMonth, day $selectedDay",
+                    text = "Steps for ${monthName(selectedMonth)}, " +
+                        "day ${formatWholeNumber(selectedDay)}",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "Currently saved: $savedSteps",
+                    text = "Currently saved: ${formatWholeNumber(savedSteps)}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -162,17 +166,19 @@ private fun DateSelectorCard(
             )
             ValueSelector(
                 label = "Month",
-                value = selectedMonth,
-                minimum = 1,
-                maximum = 12,
-                onValueChange = onMonthChange
+                value = monthName(selectedMonth),
+                canDecrease = selectedMonth > 1,
+                canIncrease = selectedMonth < 12,
+                onDecrease = { onMonthChange(selectedMonth - 1) },
+                onIncrease = { onMonthChange(selectedMonth + 1) }
             )
             ValueSelector(
                 label = "Day",
-                value = selectedDay,
-                minimum = 1,
-                maximum = 30,
-                onValueChange = onDayChange
+                value = formatWholeNumber(selectedDay),
+                canDecrease = selectedDay > 1,
+                canIncrease = selectedDay < 30,
+                onDecrease = { onDayChange(selectedDay - 1) },
+                onIncrease = { onDayChange(selectedDay + 1) }
             )
         }
     }
@@ -181,37 +187,49 @@ private fun DateSelectorCard(
 @Composable
 private fun ValueSelector(
     label: String,
-    value: Int,
-    minimum: Int,
-    maximum: Int,
-    onValueChange: (Int) -> Unit
+    value: String,
+    canDecrease: Boolean,
+    canIncrease: Boolean,
+    onDecrease: () -> Unit,
+    onIncrease: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = label,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleMedium
-        )
         Button(
-            onClick = { onValueChange(value - 1) },
-            enabled = value > minimum,
+            onClick = onDecrease,
+            enabled = canDecrease,
             modifier = Modifier.size(48.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
             Text(text = "−", style = MaterialTheme.typography.titleLarge)
         }
-        Text(
-            text = value.toString(),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                    softWrap = true
+                )
+            }
+        }
+
         Button(
-            onClick = { onValueChange(value + 1) },
-            enabled = value < maximum,
+            onClick = onIncrease,
+            enabled = canIncrease,
             modifier = Modifier.size(48.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
@@ -224,7 +242,7 @@ internal fun validateStepsInput(input: String): String? {
     if (input.isBlank()) return "Enter the number of steps"
 
     val steps = input.toIntOrNull()
-        ?: return "Enter a whole number from 0 to ${Int.MAX_VALUE}"
+        ?: return "Enter a whole number from 0 to ${formatWholeNumber(Int.MAX_VALUE)}"
 
     return if (steps < 0) "Steps cannot be negative" else null
 }
