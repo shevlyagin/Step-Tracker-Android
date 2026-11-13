@@ -3,6 +3,7 @@ package com.shevlyagin.steptracker.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -13,10 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.shevlyagin.steptracker.R
 import com.shevlyagin.steptracker.rememberStepTrackerState
 import com.shevlyagin.steptracker.ui.AddStepsScreen
 import com.shevlyagin.steptracker.ui.DashboardScreen
@@ -37,25 +40,25 @@ fun NavigationWrapper(modifier: Modifier = Modifier) {
             NavigationBar {
                 BottomNavigationItem(
                     label = "Dashboard",
-                    symbol = "D",
+                    iconResource = R.drawable.ic_dashboard,
                     selected = currentRoute == Routes.Dashboard,
                     onClick = { navigateTo(backStack, Routes.Dashboard) }
                 )
                 BottomNavigationItem(
                     label = "Add Steps",
-                    symbol = "+",
+                    iconResource = R.drawable.ic_add_steps,
                     selected = currentRoute == Routes.AddSteps,
                     onClick = { navigateTo(backStack, Routes.AddSteps) }
                 )
                 BottomNavigationItem(
                     label = "Statistics",
-                    symbol = "S",
+                    iconResource = R.drawable.ic_statistics,
                     selected = currentRoute == Routes.Statistics,
                     onClick = { navigateTo(backStack, Routes.Statistics) }
                 )
                 BottomNavigationItem(
                     label = "Goals",
-                    symbol = "G",
+                    iconResource = R.drawable.ic_goals,
                     selected = currentRoute == Routes.Goals,
                     onClick = { navigateTo(backStack, Routes.Goals) }
                 )
@@ -118,14 +121,19 @@ fun NavigationWrapper(modifier: Modifier = Modifier) {
 @Composable
 private fun RowScope.BottomNavigationItem(
     label: String,
-    symbol: String,
+    iconResource: Int,
     selected: Boolean,
     onClick: () -> Unit
 ) {
     NavigationBarItem(
         selected = selected,
         onClick = onClick,
-        icon = { Text(symbol) },
+        icon = {
+            Icon(
+                painter = painterResource(iconResource),
+                contentDescription = label
+            )
+        },
         label = { Text(label) }
     )
 }

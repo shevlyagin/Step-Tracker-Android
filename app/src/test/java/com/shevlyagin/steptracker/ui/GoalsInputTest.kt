@@ -19,7 +19,8 @@ class GoalsInputTest {
 
     @Test
     fun lettersFractionsAndOverflowAreRejected() {
-        val expectedMessage = "Enter a whole number from 1 to ${Int.MAX_VALUE}"
+        val expectedMessage =
+            "Enter a whole number from 1 to ${formatWholeNumber(Int.MAX_VALUE)}"
 
         assertEquals(expectedMessage, validateGoalInput("goal"))
         assertEquals(expectedMessage, validateGoalInput("10000.5"))

@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shevlyagin.steptracker.ui.theme.StepTrackerAndroidTheme
-import java.util.Locale
 
 @Composable
 fun StatisticsScreen(
@@ -150,9 +149,10 @@ private fun MonthSelectorCard(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = selectedMonth.toString(),
+                            text = monthName(selectedMonth),
                             style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            softWrap = true
                         )
                     }
                 }
@@ -203,12 +203,6 @@ private fun StatisticCard(
         }
     }
 }
-
-private fun formatWholeNumber(value: Long): String =
-    String.format(Locale.US, "%,d", value)
-
-private fun formatAverage(value: Double): String =
-    String.format(Locale.US, "%,.1f", value)
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
