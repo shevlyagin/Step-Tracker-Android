@@ -16,7 +16,11 @@ It builds on my original Java Step Tracker project and demonstrates the practica
 
 ## Demo
 
-**[Watch the Step Tracker Android demo on YouTube](https://youtube.com/shorts/W0r64to347A)**
+- **[Watch Video Demo — YouTube](https://youtube.com/shorts/W0r64to347A)**
+- **[Try Live Android App — Appetize.io](https://appetize.io/app/b_kyncse2g2b3q6jxyrpffytb6d4)**
+
+The interactive demo runs directly in your browser. Session duration and
+availability may be limited by the Appetize.io free plan.
 
 ## Features
 
