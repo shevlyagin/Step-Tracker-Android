@@ -1,0 +1,67 @@
+name: Build Debug APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-debug-apk:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK components
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platform-tools" "build-tools;36.0.0"
+
+          sdk_root="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+          platform_jar="$sdk_root/platforms/android-37.1/android.jar"
+
+          if [[ ! -f "$platform_jar" ]]; then
+            curl -fsSL \
+              https://dl.google.com/android/repository/platform-37.1_r01.zip \
+              -o /tmp/platform37.zip
+            echo "cadf0a541847820ea3d8ffc5c192562a18376cf9ba510bf9659c772f9a442184  /tmp/platform37.zip" \
+              | sha256sum -c -
+            mkdir -p "$sdk_root/platforms"
+            unzip -q -o /tmp/platform37.zip -d "$sdk_root/platforms"
+          fi
+
+          test -f "$platform_jar"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Debug APK
+        run: bash ./gradlew :app:assembleDebug --no-daemon --console=plain
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: step-tracker-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
