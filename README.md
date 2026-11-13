@@ -8,6 +8,12 @@ Compose as an Android adaptation of the original
 The project focuses on clear business logic, basic reactive Compose state, and
 a small structure that is easy to understand and extend.
 
+## Project Background
+
+This project was developed during my Higher Vocational Education studies in Cross-Platform Application Development (*Grado Superior en Desarrollo de Aplicaciones Multiplataforma — DAM*) in Spain, as part of the *Programación de Dispositivos Móviles y Multimedia (PMM)* module.
+
+It builds on my original Java Step Tracker project and demonstrates the practical application of Kotlin, Jetpack Compose, Material 3, and Navigation3 in Android development.
+
 ## Demo
 
 **[Watch the Step Tracker Android demo on YouTube](https://youtube.com/shorts/W0r64to347A)**
